@@ -19,6 +19,9 @@
     
     if (selected) {
         
+//        newCenter = CGPointMake(_center.x + sinf(M_PI_2 - (_startAngle + (_endAngle - _startAngle)/2))*offset,
+//                                _center.y + cosf(M_PI_2 - (_startAngle + (_endAngle - _startAngle)/2))*offset);
+        
         newCenter = CGPointMake(_center.x + cosf((_startAngle + _endAngle)/2) * offset,
                                 _center.y + sinf((_startAngle + _endAngle)/2) * offset);
     }

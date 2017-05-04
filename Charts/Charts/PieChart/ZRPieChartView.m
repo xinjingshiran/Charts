@@ -102,17 +102,29 @@
 {
     CGPoint touchPoint = [[touches anyObject] locationInView:self];
     
+    ZRPieShapeLayer *selectedLayer = nil;
+    
     for (ZRPieShapeLayer *layer in _pieLayers) {
+        
+        layer.selected = NO;
         
         if (CGPathContainsPoint(layer.path, 0, touchPoint, YES)) {
             
-            layer.selected = YES;
-            
-        }else {
-            
-            layer.selected = NO;
+            selectedLayer = layer;
         }
     }
+    
+    [UIView animateWithDuration:0.3
+                          delay:0.3
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         
+                         self.transform = CGAffineTransformRotate(CGAffineTransformIdentity, M_PI_2 - (selectedLayer.startAngle + (selectedLayer.endAngle - selectedLayer.startAngle)/2));
+                     }
+                     completion:^(BOOL finished) {
+                         
+                         selectedLayer.selected = YES;
+                     }];
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
