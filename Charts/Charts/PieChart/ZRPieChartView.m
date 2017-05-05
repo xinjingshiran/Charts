@@ -160,6 +160,11 @@
                              [self moveIconAtLayer:_selectedLayer selected:YES];
                              
                              _selectedLayer.selected = YES;
+                             
+                             if ([_delegate respondsToSelector:@selector(pieView:didSelectSectorAtIndex:)]) {
+                                 
+                                 [_delegate pieView:self didSelectSectorAtIndex:[_pieLayers indexOfObject:_selectedLayer]];
+                             }
                          }];
     }
 }
@@ -186,16 +191,6 @@
             break;
         }
     }
-}
-
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-
-}
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    
 }
 
 #pragma mark - Animate Icon -
