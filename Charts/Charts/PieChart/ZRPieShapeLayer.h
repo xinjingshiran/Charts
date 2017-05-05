@@ -23,4 +23,6 @@
 
 @property (nonatomic, assign) BOOL selected;
 
+@property (nonatomic, assign) CGFloat offset;
+
 @end

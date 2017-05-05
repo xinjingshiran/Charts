@@ -10,18 +10,37 @@
 
 @implementation ZRPieShapeLayer
 
+- (instancetype)init
+{
+    self = [super init];
+    
+    if (self) {
+        
+        _offset = 15;
+    }
+    
+    return self;
+}
+
+- (void)drawInContext:(CGContextRef)ctx
+{
+    NSLog(@"drawInContext");
+}
+
+#pragma mark - Setter -
+
 - (void)setSelected:(BOOL)selected
 {
     _selected = selected;
     
     CGPoint newCenter = _center;
-    CGFloat offset = 15;
+    CGFloat offset = _offset;
     
     if (selected) {
         
-//        newCenter = CGPointMake(_center.x + sinf(M_PI_2 - (_startAngle + (_endAngle - _startAngle)/2))*offset,
-//                                _center.y + cosf(M_PI_2 - (_startAngle + (_endAngle - _startAngle)/2))*offset);
-        
+//        newCenter = CGPointMake(_center.x + sinf(M_PI_2 - (_startAngle+_endAngle)/2)*offset,
+//                                _center.y + cosf(M_PI_2 - (_startAngle+_endAngle)/2)*offset);
+//        
         newCenter = CGPointMake(_center.x + cosf((_startAngle + _endAngle)/2) * offset,
                                 _center.y + sinf((_startAngle + _endAngle)/2) * offset);
     }
