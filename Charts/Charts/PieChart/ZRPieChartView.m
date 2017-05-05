@@ -49,7 +49,11 @@
 
 - (void)drawLayers
 {
+    [_pieLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [_pieLayers removeAllObjects];
+    
+    [_iconImageViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_iconImageViews removeAllObjects];
     
     CGFloat totalValue = 0.0;
     
@@ -80,20 +84,9 @@
         [_pieLayers addObject:layer];
         
         _currentAngle = endAngle;
-    }
-    
-    for (ZRPieShapeLayer *layer in _pieLayers) {
         
-        CGPoint iconCenter = CGPointZero;
-        iconCenter.x = center.x+cosf((layer.startAngle+layer.endAngle)/2)*((layer.innerRadius+layer.radius)/2);
-        iconCenter.y = center.y+sinf((layer.startAngle+layer.endAngle)/2)*((layer.innerRadius+layer.radius)/2);
-        
-        CGRect bounds = CGRectMake(0, 0, 20, 20);
-        
-        UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:bounds];
-        iconImageView.center = iconCenter;
-        iconImageView.image = _icons[[_pieLayers indexOfObject:layer]];
-        [self.layer addSublayer:iconImageView.layer];
+        UIImageView *iconImageView = [self iconImageViewAtLayer:layer];
+        [self addSubview:iconImageView];
         
         [_iconImageViews addObject:iconImageView];
     }
@@ -133,7 +126,23 @@
     return path;
 }
 
-#pragma mark - Setter - 
+- (UIImageView *)iconImageViewAtLayer:(ZRPieShapeLayer *)layer
+{
+    CGPoint iconCenter = CGPointZero;
+    iconCenter.x = layer.center.x+cosf((layer.startAngle+layer.endAngle)/2)*((layer.innerRadius+layer.radius)/2);
+    iconCenter.y = layer.center.y+sinf((layer.startAngle+layer.endAngle)/2)*((layer.innerRadius+layer.radius)/2);
+    
+    CGRect bounds = CGRectMake(0, 0, 20, 20);
+    
+    UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:bounds];
+    iconImageView.center = iconCenter;
+    iconImageView.image = _icons[[_pieLayers indexOfObject:layer]];
+    [self.layer addSublayer:iconImageView.layer];
+    
+    return iconImageView;
+}
+
+#pragma mark - Setter -
 
 - (void)setSelectedLayer:(ZRPieShapeLayer *)selectedLayer
 {
