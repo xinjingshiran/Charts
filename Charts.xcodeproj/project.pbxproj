@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D03A6B1E1EBC454600FD596A /* work_order_finish_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D03A6B1D1EBC454600FD596A /* work_order_finish_icon@2x.png */; };
 		D053BCDE1EBAE22A00866D92 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D053BCDD1EBAE22A00866D92 /* main.m */; };
 		D053BCE11EBAE22A00866D92 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D053BCE01EBAE22A00866D92 /* AppDelegate.m */; };
 		D053BCE41EBAE22A00866D92 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D053BCE31EBAE22A00866D92 /* ViewController.m */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D03A6B1D1EBC454600FD596A /* work_order_finish_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "work_order_finish_icon@2x.png"; sourceTree = "<group>"; };
 		D053BCD91EBAE22A00866D92 /* Charts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Charts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D053BCDD1EBAE22A00866D92 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D053BCDF1EBAE22A00866D92 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 		D053BCDC1EBAE22A00866D92 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D03A6B1D1EBC454600FD596A /* work_order_finish_icon@2x.png */,
 				D053BCDD1EBAE22A00866D92 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -275,6 +278,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D03A6B1E1EBC454600FD596A /* work_order_finish_icon@2x.png in Resources */,
 				D053BCEC1EBAE22A00866D92 /* LaunchScreen.storyboard in Resources */,
 				D053BCE91EBAE22A00866D92 /* Assets.xcassets in Resources */,
 				D053BCE71EBAE22A00866D92 /* Main.storyboard in Resources */,
@@ -457,6 +461,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = PG6W24RHAU;
 				INFOPLIST_FILE = Charts/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ryanzhang.Charts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -469,6 +474,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = PG6W24RHAU;
 				INFOPLIST_FILE = Charts/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ryanzhang.Charts;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -544,6 +550,7 @@
 				D053BD081EBAE22B00866D92 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D053BD091EBAE22B00866D92 /* Build configuration list for PBXNativeTarget "ChartsTests" */ = {
 			isa = XCConfigurationList;
@@ -552,6 +559,7 @@
 				D053BD0B1EBAE22B00866D92 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D053BD0C1EBAE22B00866D92 /* Build configuration list for PBXNativeTarget "ChartsUITests" */ = {
 			isa = XCConfigurationList;
@@ -560,6 +568,7 @@
 				D053BD0E1EBAE22B00866D92 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

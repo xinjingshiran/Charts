@@ -26,7 +26,7 @@
     rc.size.height = rc.size.width;
     
     ZRPieChartView *pieView = [[ZRPieChartView alloc] initWithFrame:rc];
-    pieView.backgroundColor = [UIColor whiteColor];
+    pieView.backgroundColor = [UIColor blueColor];
     [self.view addSubview:pieView];
     
     [pieView drawPie];

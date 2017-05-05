@@ -9,78 +9,17 @@
 #import "ZRPieChartView.h"
 #import "ZRPieShapeLayer.h"
 
-static void pathApplierSumCoordinatesOfAllPoints(void* info, const CGPathElement* element)
-{
-    float* dataArray = (float*) info;
-    float xTotal = dataArray[0];
-    float yTotal = dataArray[1];
-    float numPoints = dataArray[2];
-    
-    
-    switch (element->type)
-    {
-        case kCGPathElementMoveToPoint:
-        {
-            /** for a move to, add the single target point only */
-            
-            CGPoint p = element->points[0];
-            xTotal += p.x;
-            yTotal += p.y;
-            numPoints += 1.0;
-            
-        }
-            break;
-        case kCGPathElementAddLineToPoint:
-        {
-            /** for a line to, add the single target point only */
-            
-            CGPoint p = element->points[0];
-            xTotal += p.x;
-            yTotal += p.y;
-            numPoints += 1.0;
-            
-        }
-            break;
-        case kCGPathElementAddQuadCurveToPoint:
-            for( int i=0; i<2; i++ ) // note: quad has TWO not THREE
-            {
-                /** for a curve, we add all ppints, including the control poitns */
-                CGPoint p = element->points[i];
-                xTotal += p.x;
-                yTotal += p.y;
-                numPoints += 1.0;
-            }
-            break;
-        case kCGPathElementAddCurveToPoint:
-            for( int i=0; i<3; i++ ) // note: cubic has THREE not TWO
-            {
-                /** for a curve, we add all ppints, including the control poitns */
-                CGPoint p = element->points[i];
-                xTotal += p.x;
-                yTotal += p.y;
-                numPoints += 1.0;
-            }
-            break;
-        case kCGPathElementCloseSubpath:
-            /** for a close path, do nothing */
-            break;
-    }
-    
-    //NSLog(@"new x=%2.2f, new y=%2.2f, new num=%2.2f", xTotal, yTotal, numPoints);
-    dataArray[0] = xTotal;
-    dataArray[1] = yTotal;
-    dataArray[2] = numPoints;
-}
-
-@interface ZRPieChartView ()
+@interface ZRPieChartView ()<CAAnimationDelegate>
 
 @property CGFloat currentAngle;
+
+@property (nonatomic, strong) CAShapeLayer *backgroundLayer;
 
 @property (nonatomic, strong) NSMutableArray *pieLayers;
 
 @property (nonatomic, strong) NSMutableArray *iconImageViews;
 
-@property (nonatomic, strong) CAShapeLayer *animationLayer;
+@property (nonatomic, strong) ZRPieShapeLayer *selectedLayer;
 
 @end
 
@@ -91,6 +30,9 @@ static void pathApplierSumCoordinatesOfAllPoints(void* info, const CGPathElement
     self = [super initWithFrame:frame];
     
     if (self) {
+        
+        self.layer.cornerRadius = frame.size.width/2;
+        self.layer.masksToBounds = YES;
         
         _pieLayers = [[NSMutableArray alloc] init];
         
@@ -158,8 +100,8 @@ static void pathApplierSumCoordinatesOfAllPoints(void* info, const CGPathElement
         
         UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:bounds];
         iconImageView.center = iconCenter;
-        iconImageView.backgroundColor = [UIColor blueColor];
-        [self addSubview:iconImageView];
+        iconImageView.image = [UIImage imageNamed:@"work_order_finish_icon.png"];
+        [self.layer addSublayer:iconImageView.layer];
         
         [_iconImageViews addObject:iconImageView];
     }
@@ -169,6 +111,8 @@ static void pathApplierSumCoordinatesOfAllPoints(void* info, const CGPathElement
     CAShapeLayer *holeLayer = [self layerWithCenter:center radius:holeRadius innerRadius:0 startAngle:0 endAngle:M_PI*2];
     holeLayer.fillColor = [UIColor whiteColor].CGColor;
     [self.layer addSublayer:holeLayer];
+    
+    self.selectedLayer = _pieLayers[0];
 }
 
 - (ZRPieShapeLayer *)layerWithCenter:(CGPoint)center radius:(CGFloat)radius innerRadius:(CGFloat)innerRadius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle
@@ -197,16 +141,35 @@ static void pathApplierSumCoordinatesOfAllPoints(void* info, const CGPathElement
     return path;
 }
 
-- (CGPoint)centerOfCGPath:(CGPathRef)path
+#pragma mark - Setter - 
+
+- (void)setSelectedLayer:(ZRPieShapeLayer *)selectedLayer
 {
-    float dataArray[3] = { 0, 0, 0 };
-    CGPathApply(path, dataArray, pathApplierSumCoordinatesOfAllPoints);
+    _selectedLayer = selectedLayer;
     
-    float averageX = dataArray[0] / dataArray[2];
-    float averageY = dataArray[1]  / dataArray[2];
-    CGPoint centerOfPath = CGPointMake(averageX, averageY);
+    CGFloat angle = M_PI_2-(_selectedLayer.startAngle+_selectedLayer.endAngle)/2;
     
-    return centerOfPath;
+    for (ZRPieShapeLayer *layer in _pieLayers) {
+        
+        [self translateIconAtLayer:layer angle:-angle];
+    }
+    
+    if (_selectedLayer) {
+        
+        [UIView animateWithDuration:0.3
+                              delay:0.3
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                             
+                             self.transform = CGAffineTransformRotate(CGAffineTransformIdentity,angle);
+                         }
+                         completion:^(BOOL finished) {
+                             
+                             [self moveIconAtLayer:_selectedLayer selected:YES];
+                             
+                             _selectedLayer.selected = YES;
+                         }];
+    }
 }
 
 #pragma mark - UITouch Event -
@@ -215,33 +178,22 @@ static void pathApplierSumCoordinatesOfAllPoints(void* info, const CGPathElement
 {
     CGPoint touchPoint = [[touches anyObject] locationInView:self];
     
-    ZRPieShapeLayer *selectedLayer = nil;
-    
-    for (ZRPieShapeLayer *layer in _pieLayers) {
+    if (_selectedLayer) {
         
-        layer.selected = NO;
+        _selectedLayer.selected = NO;
         
-        [self animateIconAtLayer:layer selected:NO];
-        
-        if (CGPathContainsPoint(layer.path, 0, touchPoint, YES)) {
-            
-            selectedLayer = layer;
-        }
+        [self moveIconAtLayer:_selectedLayer selected:NO];
     }
     
-    [UIView animateWithDuration:0.3
-                          delay:0.3
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         
-                         self.transform = CGAffineTransformRotate(CGAffineTransformIdentity, M_PI_2 - (selectedLayer.startAngle + (selectedLayer.endAngle - selectedLayer.startAngle)/2));
-                     }
-                     completion:^(BOOL finished) {
-                         
-                         [self animateIconAtLayer:selectedLayer selected:YES];
-                         
-                         selectedLayer.selected = YES;
-                     }];
+    for (ZRPieShapeLayer *layer in _pieLayers) {
+
+        if (CGPathContainsPoint(layer.path, 0, touchPoint, YES)) {
+            
+            self.selectedLayer = layer;
+            
+            break;
+        }
+    }
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -256,7 +208,7 @@ static void pathApplierSumCoordinatesOfAllPoints(void* info, const CGPathElement
 
 #pragma mark - Animate Icon -
 
-- (void)animateIconAtLayer:(ZRPieShapeLayer *)layer selected:(BOOL)selected
+- (void)moveIconAtLayer:(ZRPieShapeLayer *)layer selected:(BOOL)selected
 {
     UIImageView *iconImageView = _iconImageViews[[_pieLayers indexOfObject:layer]];
     
@@ -277,6 +229,17 @@ static void pathApplierSumCoordinatesOfAllPoints(void* info, const CGPathElement
                      animations:^{
                         
                          iconImageView.center = iconCenter;
+                     }];
+}
+
+- (void)translateIconAtLayer:(ZRPieShapeLayer *)layer angle:(CGFloat)angle
+{
+    UIImageView *iconImageView = _iconImageViews[[_pieLayers indexOfObject:layer]];
+    
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                        
+                         iconImageView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, angle);
                      }];
 }
 
