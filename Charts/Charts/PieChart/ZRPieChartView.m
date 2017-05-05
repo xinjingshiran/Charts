@@ -47,21 +47,13 @@
     [self drawLayers];
 }
 
-- (void)setupDefault
-{
-    
-}
-
 - (void)drawLayers
 {
     [_pieLayers removeAllObjects];
     
-    NSArray *percents = @[@"2", @"2", @"3", @"1", @"4"];
-    NSArray *colors = @[[UIColor redColor],[UIColor orangeColor],[UIColor greenColor],[UIColor brownColor],[UIColor cyanColor]];
-    
     CGFloat totalValue = 0.0;
     
-    for (NSString *value in percents) {
+    for (NSNumber *value in _percents) {
         
         totalValue += value.floatValue;
     }
@@ -71,9 +63,9 @@
     CGFloat innerRadius = (self.frame.size.width - 40)/4;
     _currentAngle = 0;
     
-    for (NSInteger i = 0; i < percents.count; i++) {
+    for (NSInteger i = 0; i < _percents.count; i++) {
         
-        CGFloat value = [percents[i] floatValue];
+        CGFloat value = [_percents[i] floatValue];
         
         CGFloat endAngle = _currentAngle + (value/totalValue) * M_PI * 2;
         
@@ -82,7 +74,7 @@
                                            innerRadius:innerRadius
                                             startAngle:_currentAngle
                                               endAngle:endAngle];
-        layer.fillColor = [colors[i] CGColor];
+        layer.fillColor = [_colors[i] CGColor];
         [self.layer addSublayer:layer];
         
         [_pieLayers addObject:layer];
@@ -100,7 +92,7 @@
         
         UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:bounds];
         iconImageView.center = iconCenter;
-        iconImageView.image = [UIImage imageNamed:@"work_order_finish_icon.png"];
+        iconImageView.image = _icons[[_pieLayers indexOfObject:layer]];
         [self.layer addSublayer:iconImageView.layer];
         
         [_iconImageViews addObject:iconImageView];

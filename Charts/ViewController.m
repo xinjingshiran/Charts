@@ -25,8 +25,13 @@
     rc.size.width = self.view.frame.size.width - rc.origin.x*2;
     rc.size.height = rc.size.width;
     
+    UIImage *icon = [UIImage imageNamed:@"work_order_finish_icon.png"];
+    
     ZRPieChartView *pieView = [[ZRPieChartView alloc] initWithFrame:rc];
     pieView.backgroundColor = [UIColor blueColor];
+    pieView.percents = @[@2, @2, @3, @1, @4];
+    pieView.colors = @[[UIColor redColor],[UIColor orangeColor],[UIColor greenColor],[UIColor brownColor],[UIColor cyanColor]];
+    pieView.icons = @[icon, icon, icon, icon, icon];
     [self.view addSubview:pieView];
     
     [pieView drawPie];

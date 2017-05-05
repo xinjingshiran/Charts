@@ -10,6 +10,12 @@
 
 @interface ZRPieChartView : UIView
 
+@property (nonatomic, strong) NSArray *percents;
+
+@property (nonatomic, strong) NSArray *colors;
+
+@property (nonatomic, strong) NSArray *icons;
+
 - (void)drawPie;
 
 @end
