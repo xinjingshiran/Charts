@@ -25,6 +25,8 @@
 
 @property (nonatomic, strong) ZRPieShapeLayer *selectedLayer;
 
+@property (nonatomic, strong) CAShapeLayer *holeLayer;
+
 @property (nonatomic, strong) NSMutableArray *animations;
 
 @property (nonatomic, strong) NSTimer *animationTimer;
@@ -151,6 +153,8 @@
 
 - (void)addHoleLayer
 {
+    [_holeLayer removeFromSuperlayer];
+    
     CGFloat holeRadius = _innerRadius;
     
     UIBezierPath *path = [self pathWithCenter:_pieCenter radius:holeRadius innerRadius:0 startAngle:0 endAngle:M_PI*2];
@@ -159,6 +163,8 @@
     layer.path = path.CGPath;
     layer.fillColor = [UIColor whiteColor].CGColor;
     [_pieContainerView.layer addSublayer:layer];
+    
+    self.holeLayer = layer;
 }
 
 - (void)addIconLayerViewAtLayer:(ZRPieShapeLayer *)pieLayer
@@ -269,6 +275,11 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     CGPoint touchPoint = [[touches anyObject] locationInView:_pieContainerView];
+    
+    if (CGPathContainsPoint(_holeLayer.path, 0, touchPoint, YES)) {
+        
+        return;
+    }
     
     if (_selectedLayer) {
         
