@@ -25,4 +25,6 @@
 
 @property (nonatomic, assign) CGFloat offset;
 
+- (void)createAnimationWithKey:(NSString *)key fromValue:(NSNumber *)fromValue toValue:(NSNumber *)toValue delegate:(id)delegate;
+
 @end

@@ -11,15 +11,23 @@
 
 @interface ZRPieChartView ()<CAAnimationDelegate>
 
-@property CGFloat currentAngle;
+@property (nonatomic, strong) UIView *pieContainerView;
 
-@property (nonatomic, strong) CAShapeLayer *backgroundLayer;
+@property (nonatomic, assign) CGPoint pieCenter;
+
+@property (nonatomic, assign) CGFloat radius;
+
+@property (nonatomic, assign) CGFloat innerRadius;
 
 @property (nonatomic, strong) NSMutableArray *pieLayers;
 
-@property (nonatomic, strong) NSMutableArray *iconImageViews;
+@property (nonatomic, strong) NSMutableArray *iconLayers;
 
 @property (nonatomic, strong) ZRPieShapeLayer *selectedLayer;
+
+@property (nonatomic, strong) NSMutableArray *animations;
+
+@property (nonatomic, strong) NSTimer *animationTimer;
 
 @end
 
@@ -31,12 +39,16 @@
     
     if (self) {
         
-        self.layer.cornerRadius = frame.size.width/2;
-        self.layer.masksToBounds = YES;
+        _pieContainerView = [[UIView alloc] initWithFrame:self.bounds];
+        _pieContainerView.layer.cornerRadius = frame.size.width/2;
+        _pieContainerView.layer.masksToBounds = YES;
+        [self addSubview:_pieContainerView];
         
         _pieLayers = [[NSMutableArray alloc] init];
         
-        _iconImageViews = [[NSMutableArray alloc] init];
+        _iconLayers = [[NSMutableArray alloc] init];
+        
+        _animations = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -44,7 +56,16 @@
 
 - (void)drawPie
 {
+    [self setupDefault];
+    
     [self drawLayers];
+}
+
+- (void)setupDefault
+{
+    _pieCenter = CGPointMake(CGRectGetWidth(self.frame)/2, CGRectGetHeight(self.frame)/2);
+    _radius = (MIN(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)) - 40)/2;
+    _innerRadius = 70;
 }
 
 - (void)drawLayers
@@ -52,8 +73,8 @@
     [_pieLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [_pieLayers removeAllObjects];
     
-    [_iconImageViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [_iconImageViews removeAllObjects];
+    [_iconLayers makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_iconLayers removeAllObjects];
     
     CGFloat totalValue = 0.0;
     
@@ -62,50 +83,53 @@
         totalValue += value.floatValue;
     }
     
-    CGPoint center = CGPointMake(CGRectGetWidth(self.frame)/2, CGRectGetHeight(self.frame)/2);
-    CGFloat radius = (self.frame.size.width - 40)/2;
-    CGFloat innerRadius = (self.frame.size.width - 40)/4;
-    _currentAngle = 0;
+    CGFloat startFromAngle = 0;
+    CGFloat startToAngle = 0;
+    
+    CGFloat endFromAngle = 0;
+    CGFloat endToAngle = 0;
     
     for (NSInteger i = 0; i < _percents.count; i++) {
         
         CGFloat value = [_percents[i] floatValue];
         
-        CGFloat endAngle = _currentAngle + (value/totalValue) * M_PI * 2;
+        endToAngle += (value/totalValue) * M_PI * 2;
         
-        ZRPieShapeLayer *layer = [self layerWithCenter:center
-                                                radius:radius
-                                           innerRadius:innerRadius
-                                            startAngle:_currentAngle
-                                              endAngle:endAngle];
+        ZRPieShapeLayer *layer = [self layerWithCenter:_pieCenter
+                                                radius:_radius
+                                           innerRadius:_innerRadius
+                                            startAngle:startToAngle
+                                              endAngle:endToAngle];
         layer.fillColor = [_colors[i] CGColor];
-        [self.layer addSublayer:layer];
+        [_pieContainerView.layer addSublayer:layer];
         
         [_pieLayers addObject:layer];
         
-        _currentAngle = endAngle;
+        [self addIconLayerViewAtLayer:layer];
         
-        UIImageView *iconImageView = [self iconImageViewAtLayer:layer];
-        [self addSubview:iconImageView];
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:1.5];
         
-        [_iconImageViews addObject:iconImageView];
+        [layer createAnimationWithKey:@"startAngle"
+                            fromValue:@(startFromAngle)
+                              toValue:@(startToAngle)
+                             delegate:self];
+        [layer createAnimationWithKey:@"endAngle"
+                            fromValue:@(endFromAngle)
+                              toValue:@(endToAngle)
+                             delegate:self];
+        
+        [CATransaction commit];
+        
+        startToAngle = endToAngle;
     }
     
-    CGFloat holeRadius = innerRadius;
-    
-    CAShapeLayer *holeLayer = [self layerWithCenter:center radius:holeRadius innerRadius:0 startAngle:0 endAngle:M_PI*2];
-    holeLayer.fillColor = [UIColor whiteColor].CGColor;
-    [self.layer addSublayer:holeLayer];
-    
-    self.selectedLayer = _pieLayers[0];
+    [self addHoleLayer];
 }
 
 - (ZRPieShapeLayer *)layerWithCenter:(CGPoint)center radius:(CGFloat)radius innerRadius:(CGFloat)innerRadius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle
 {
-    UIBezierPath *path = [self pathWithCenter:center radius:radius innerRadius:innerRadius startAngle:startAngle endAngle:endAngle];
-
     ZRPieShapeLayer *layer = [ZRPieShapeLayer layer];
-    layer.path = path.CGPath;
     layer.center = center;
     layer.radius = radius;
     layer.innerRadius = innerRadius;
@@ -125,20 +149,85 @@
     return path;
 }
 
-- (UIImageView *)iconImageViewAtLayer:(ZRPieShapeLayer *)layer
+- (void)addHoleLayer
 {
-    CGPoint iconCenter = CGPointZero;
-    iconCenter.x = layer.center.x+cosf((layer.startAngle+layer.endAngle)/2)*((layer.innerRadius+layer.radius)/2);
-    iconCenter.y = layer.center.y+sinf((layer.startAngle+layer.endAngle)/2)*((layer.innerRadius+layer.radius)/2);
+    CGFloat holeRadius = _innerRadius;
     
-    CGRect bounds = CGRectMake(0, 0, 20, 20);
+    UIBezierPath *path = [self pathWithCenter:_pieCenter radius:holeRadius innerRadius:0 startAngle:0 endAngle:M_PI*2];
     
-    UIImageView *iconImageView = [[UIImageView alloc] initWithFrame:bounds];
-    iconImageView.center = iconCenter;
-    iconImageView.image = _icons[[_pieLayers indexOfObject:layer]];
-    [self.layer addSublayer:iconImageView.layer];
+    CAShapeLayer *layer = [CAShapeLayer layer];
+    layer.path = path.CGPath;
+    layer.fillColor = [UIColor whiteColor].CGColor;
+    [_pieContainerView.layer addSublayer:layer];
+}
+
+- (void)addIconLayerViewAtLayer:(ZRPieShapeLayer *)pieLayer
+{
+    CAShapeLayer *layer = [CAShapeLayer layer];
+    layer.bounds = CGRectMake(0, 0, 20, 20);
+    layer.anchorPoint = CGPointMake(0.5, 0.5);
+    layer.position = CGPointMake(pieLayer.center.x+(pieLayer.radius+pieLayer.innerRadius)/2, pieLayer.center.y);
+    layer.backgroundColor = [UIColor clearColor].CGColor;
+    layer.contents = (id)[_icons[[_pieLayers indexOfObject:pieLayer]] CGImage];
     
-    return iconImageView;
+    [pieLayer addSublayer:layer];
+    
+    [_iconLayers addObject:layer];
+}
+
+#pragma mark - CAAnimation Delegate -
+
+- (void)animationDidStart:(CAAnimation *)anim
+{
+    if (_animationTimer == nil) {
+        
+        static float timeInterval = 1.0/60;
+        
+        _animationTimer= [NSTimer timerWithTimeInterval:timeInterval target:self selector:@selector(updateTimerFired:) userInfo:nil repeats:YES];
+        
+        [[NSRunLoop mainRunLoop] addTimer:_animationTimer forMode:NSRunLoopCommonModes];
+    }
+    
+    [_animations addObject:anim];
+}
+
+- (void)updateTimerFired:(NSTimer *)timer;
+{
+    [_pieLayers enumerateObjectsUsingBlock:^(CAShapeLayer *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        ZRPieShapeLayer *layer = (ZRPieShapeLayer *)obj;
+        
+        NSNumber *presentationLayerStartAngle = [[layer presentationLayer] valueForKey:@"startAngle"];
+        CGFloat startAngle = [presentationLayerStartAngle doubleValue];
+        
+        NSNumber *presentationLayerEndAngle = [[layer presentationLayer] valueForKey:@"endAngle"];
+        CGFloat endAngle = [presentationLayerEndAngle doubleValue];
+        
+        UIBezierPath *path = [self pathWithCenter:layer.center radius:layer.radius innerRadius:layer.innerRadius startAngle:startAngle endAngle:endAngle];
+        
+        obj.path = path.CGPath;
+        
+        CALayer *iconLayer = _iconLayers[idx];
+        
+        CGFloat midAngle = (startAngle + endAngle)/2;
+        [CATransaction setDisableActions:YES];
+        iconLayer.position = CGPointMake(layer.center.x + ((layer.radius+layer.innerRadius)/2 * cos(midAngle)),
+                                         layer.center.y + ((layer.radius+layer.innerRadius)/2 * sin(midAngle)));
+        [CATransaction setDisableActions:NO];
+    }];
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+    [_animations removeObject:anim];
+    
+    if (_animations.count == 0) {
+        
+        [_animationTimer invalidate];
+        _animationTimer = nil;
+        
+        self.selectedLayer = _pieLayers[0];
+    }
 }
 
 #pragma mark - Setter -
@@ -161,12 +250,10 @@
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              
-                             self.transform = CGAffineTransformRotate(CGAffineTransformIdentity,angle);
+                             _pieContainerView.transform = CGAffineTransformRotate(CGAffineTransformIdentity,angle);
                          }
                          completion:^(BOOL finished) {
-                             
-                             [self moveIconAtLayer:_selectedLayer selected:YES];
-                             
+                            
                              _selectedLayer.selected = YES;
                              
                              if ([_delegate respondsToSelector:@selector(pieView:didSelectSectorAtIndex:)]) {
@@ -181,13 +268,11 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    CGPoint touchPoint = [[touches anyObject] locationInView:self];
+    CGPoint touchPoint = [[touches anyObject] locationInView:_pieContainerView];
     
     if (_selectedLayer) {
         
         _selectedLayer.selected = NO;
-        
-        [self moveIconAtLayer:_selectedLayer selected:NO];
     }
     
     for (ZRPieShapeLayer *layer in _pieLayers) {
@@ -203,39 +288,11 @@
 
 #pragma mark - Animate Icon -
 
-- (void)moveIconAtLayer:(ZRPieShapeLayer *)layer selected:(BOOL)selected
-{
-    UIImageView *iconImageView = _iconImageViews[[_pieLayers indexOfObject:layer]];
-    
-    CGPoint iconCenter = iconImageView.center;
-    
-    CGPoint newCenter = layer.center;
-    
-    if (selected) {
-        
-        newCenter = CGPointMake(layer.center.x + cosf((layer.startAngle + layer.endAngle)/2) * layer.offset,
-                                layer.center.y + sinf((layer.startAngle + layer.endAngle)/2) * layer.offset);
-    }
-    
-    iconCenter.x = newCenter.x+cosf((layer.startAngle+layer.endAngle)/2)*((layer.innerRadius+layer.radius)/2);
-    iconCenter.y = newCenter.y+sinf((layer.startAngle+layer.endAngle)/2)*((layer.innerRadius+layer.radius)/2);
-    
-    [UIView animateWithDuration:0.3
-                     animations:^{
-                        
-                         iconImageView.center = iconCenter;
-                     }];
-}
-
 - (void)translateIconAtLayer:(ZRPieShapeLayer *)layer angle:(CGFloat)angle
 {
-    UIImageView *iconImageView = _iconImageViews[[_pieLayers indexOfObject:layer]];
+    CALayer *iconLayer = _iconLayers[[_pieLayers indexOfObject:layer]];
     
-    [UIView animateWithDuration:0.3
-                     animations:^{
-                        
-                         iconImageView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, angle);
-                     }];
+    iconLayer.affineTransform = CGAffineTransformRotate(CGAffineTransformIdentity, angle);
 }
 
 /*
