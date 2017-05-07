@@ -120,7 +120,6 @@
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path moveToPoint:center];
     [path addArcWithCenter:center radius:radius startAngle:startAngle endAngle:endAngle clockwise:YES];
-    [path addArcWithCenter:center radius:innerRadius startAngle:endAngle endAngle:startAngle clockwise:NO];
     [path closePath];
     
     return path;
