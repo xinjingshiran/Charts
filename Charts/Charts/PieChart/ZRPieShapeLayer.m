@@ -82,11 +82,6 @@
     return [super needsDisplayForKey:key];
 }
 
-- (void)drawInContext:(CGContextRef)ctx
-{
-    NSLog(@"startAngle :%f   endAngle :%f", _startAngle, _endAngle);
-}
-
 #pragma mark - Setter -
 
 - (void)setSelected:(BOOL)selected
