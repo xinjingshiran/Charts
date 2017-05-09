@@ -62,6 +62,8 @@
     animation.fromValue = currentAngle;
     animation.toValue = toValue;
     animation.delegate = delegate;
+    animation.removedOnCompletion = YES;
+    animation.fillMode = kCAFillModeForwards;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
     [self addAnimation:animation forKey:key];
     
@@ -75,11 +77,14 @@
     if ([key isEqualToString:@"startAngle"] || [key isEqualToString:@"endAngle"]) {
         
         return YES;
-        
-    }else {
-        
-        return [super needsDisplayForKey:key];
     }
+    
+    return [super needsDisplayForKey:key];
+}
+
+- (void)drawInContext:(CGContextRef)ctx
+{
+    NSLog(@"startAngle :%f   endAngle :%f", _startAngle, _endAngle);
 }
 
 #pragma mark - Setter -

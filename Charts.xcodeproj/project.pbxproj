@@ -18,6 +18,10 @@
 		D053BD021EBAE22B00866D92 /* ChartsUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D053BD011EBAE22B00866D92 /* ChartsUITests.m */; };
 		D053BD141EBAEA0B00866D92 /* ZRPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = D053BD131EBAEA0B00866D92 /* ZRPieChartView.m */; };
 		D053BD171EBB411F00866D92 /* ZRPieShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D053BD161EBB411F00866D92 /* ZRPieShapeLayer.m */; };
+		D0A7CE401EC18916006F1AE9 /* ZRLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0A7CE3F1EC18916006F1AE9 /* ZRLineChartView.m */; };
+		D0C3A5FB1EC195F900408F6B /* ZRLineShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FA1EC195F900408F6B /* ZRLineShapeLayer.m */; };
+		D0C3A6001EC19C9B00408F6B /* CircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FD1EC19C9B00408F6B /* CircleProgressView.m */; };
+		D0C3A6011EC19C9B00408F6B /* CircleProgressLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FF1EC19C9B00408F6B /* CircleProgressLayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +63,14 @@
 		D053BD131EBAEA0B00866D92 /* ZRPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRPieChartView.m; sourceTree = "<group>"; };
 		D053BD151EBB411F00866D92 /* ZRPieShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZRPieShapeLayer.h; sourceTree = "<group>"; };
 		D053BD161EBB411F00866D92 /* ZRPieShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRPieShapeLayer.m; sourceTree = "<group>"; };
+		D0A7CE3E1EC18916006F1AE9 /* ZRLineChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZRLineChartView.h; sourceTree = "<group>"; };
+		D0A7CE3F1EC18916006F1AE9 /* ZRLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRLineChartView.m; sourceTree = "<group>"; };
+		D0C3A5F91EC195F900408F6B /* ZRLineShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZRLineShapeLayer.h; sourceTree = "<group>"; };
+		D0C3A5FA1EC195F900408F6B /* ZRLineShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRLineShapeLayer.m; sourceTree = "<group>"; };
+		D0C3A5FC1EC19C9B00408F6B /* CircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleProgressView.h; sourceTree = "<group>"; };
+		D0C3A5FD1EC19C9B00408F6B /* CircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleProgressView.m; sourceTree = "<group>"; };
+		D0C3A5FE1EC19C9B00408F6B /* CircleProgressLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleProgressLayer.h; sourceTree = "<group>"; };
+		D0C3A5FF1EC19C9B00408F6B /* CircleProgressLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleProgressLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +126,10 @@
 				D053BCE01EBAE22A00866D92 /* AppDelegate.m */,
 				D053BCE21EBAE22A00866D92 /* ViewController.h */,
 				D053BCE31EBAE22A00866D92 /* ViewController.m */,
+				D0C3A5FC1EC19C9B00408F6B /* CircleProgressView.h */,
+				D0C3A5FD1EC19C9B00408F6B /* CircleProgressView.m */,
+				D0C3A5FE1EC19C9B00408F6B /* CircleProgressLayer.h */,
+				D0C3A5FF1EC19C9B00408F6B /* CircleProgressLayer.m */,
 				D053BCE51EBAE22A00866D92 /* Main.storyboard */,
 				D053BCE81EBAE22A00866D92 /* Assets.xcassets */,
 				D053BCEA1EBAE22A00866D92 /* LaunchScreen.storyboard */,
@@ -153,6 +169,7 @@
 		D053BD0F1EBAE23400866D92 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				D0A7CE3D1EC18907006F1AE9 /* LineChart */,
 				D053BD101EBAE55600866D92 /* PieChart */,
 			);
 			path = Charts;
@@ -167,6 +184,17 @@
 				D053BD161EBB411F00866D92 /* ZRPieShapeLayer.m */,
 			);
 			path = PieChart;
+			sourceTree = "<group>";
+		};
+		D0A7CE3D1EC18907006F1AE9 /* LineChart */ = {
+			isa = PBXGroup;
+			children = (
+				D0A7CE3E1EC18916006F1AE9 /* ZRLineChartView.h */,
+				D0A7CE3F1EC18916006F1AE9 /* ZRLineChartView.m */,
+				D0C3A5F91EC195F900408F6B /* ZRLineShapeLayer.h */,
+				D0C3A5FA1EC195F900408F6B /* ZRLineShapeLayer.m */,
+			);
+			path = LineChart;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -306,7 +334,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0C3A6011EC19C9B00408F6B /* CircleProgressLayer.m in Sources */,
 				D053BCE41EBAE22A00866D92 /* ViewController.m in Sources */,
+				D0C3A6001EC19C9B00408F6B /* CircleProgressView.m in Sources */,
+				D0A7CE401EC18916006F1AE9 /* ZRLineChartView.m in Sources */,
+				D0C3A5FB1EC195F900408F6B /* ZRLineShapeLayer.m in Sources */,
 				D053BCE11EBAE22A00866D92 /* AppDelegate.m in Sources */,
 				D053BD141EBAEA0B00866D92 /* ZRPieChartView.m in Sources */,
 				D053BD171EBB411F00866D92 /* ZRPieShapeLayer.m in Sources */,

@@ -99,9 +99,7 @@
         
         ZRPieShapeLayer *layer = [self layerWithCenter:_pieCenter
                                                 radius:_radius
-                                           innerRadius:_innerRadius
-                                            startAngle:startToAngle
-                                              endAngle:endToAngle];
+                                           innerRadius:_innerRadius];
         layer.fillColor = [_colors[i] CGColor];
         [_pieContainerView.layer addSublayer:layer];
         
@@ -116,6 +114,7 @@
                             fromValue:@(startFromAngle)
                               toValue:@(startToAngle)
                              delegate:self];
+        
         [layer createAnimationWithKey:@"endAngle"
                             fromValue:@(endFromAngle)
                               toValue:@(endToAngle)
@@ -129,14 +128,12 @@
     [self addHoleLayer];
 }
 
-- (ZRPieShapeLayer *)layerWithCenter:(CGPoint)center radius:(CGFloat)radius innerRadius:(CGFloat)innerRadius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle
+- (ZRPieShapeLayer *)layerWithCenter:(CGPoint)center radius:(CGFloat)radius innerRadius:(CGFloat)innerRadius
 {
     ZRPieShapeLayer *layer = [ZRPieShapeLayer layer];
     layer.center = center;
     layer.radius = radius;
     layer.innerRadius = innerRadius;
-    layer.startAngle = startAngle;
-    layer.endAngle = endAngle;
     
     return layer;
 }
