@@ -14,6 +14,10 @@
 
 @interface ZRLineChartView ()<CAAnimationDelegate>
 
+@property (nonatomic, assign) CGFloat xAxisSpacing;
+
+@property (nonatomic, assign) CGFloat yAxisSpacing;
+
 @end
 
 @implementation ZRLineChartView
@@ -35,8 +39,10 @@
 
 - (void)drawLine
 {
-    CGFloat xAxisSpacing = (self.frame.size.width - kXPadding*2)/_xAxisArray.count;
-    CGFloat yAxisSpacing = (self.frame.size.height - kYPadding)/_yAxisArray.count;
+    self.xAxisSpacing = (self.frame.size.width - kXPadding*2)/_xAxisArray.count;
+    self.yAxisSpacing = (self.frame.size.height - kYPadding*2)/(_yAxisArray.count-1);
+    
+    [self setNeedsDisplay];
     
     [_dataArray enumerateObjectsUsingBlock:^(ZRLineChartLine *line, NSUInteger idx, BOOL * _Nonnull stop) {
         
@@ -46,8 +52,8 @@
             
             ZRLineChartPoint *obj = line.points[idx];
             
-            CGPoint point = CGPointMake(kXPadding + obj.x*xAxisSpacing-xAxisSpacing/2,
-                                        self.frame.size.height-kYPadding-obj.y*yAxisSpacing);
+            CGPoint point = CGPointMake(kXPadding + obj.x*_xAxisSpacing-_xAxisSpacing/2,
+                                        kYPadding + (_yAxisSpacing*(_yAxisArray.count-1))*(1-obj.y));
             
             if (idx == 0) {
                 
@@ -108,9 +114,7 @@
                                     NSForegroundColorAttributeName: fontColor,
                                     NSParagraphStyleAttributeName: style};
         
-        CGFloat spacing = (self.frame.size.width - kXPadding*2)/_xAxisArray.count;
-        
-        CGRect rc = CGRectMake(kXPadding+spacing*idx, self.frame.size.height-kYPadding, spacing, kYPadding);
+        CGRect rc = CGRectMake(kXPadding+_xAxisSpacing*idx, self.frame.size.height-kYPadding, _xAxisSpacing, kYPadding);
         
         [obj drawInRect:rc withAttributes:attribute];
         
@@ -137,11 +141,9 @@
                                     NSForegroundColorAttributeName: fontColor,
                                     NSParagraphStyleAttributeName: style};
         
-        CGFloat spacing = (self.frame.size.height - kYPadding)/_yAxisArray.count;
-    
         CGFloat width = [obj sizeWithAttributes:attribute].width;
         CGFloat height = [obj sizeWithAttributes:attribute].height;
-        CGFloat y = self.frame.size.height - kYPadding - spacing*idx - height/2;
+        CGFloat y = self.frame.size.height - kYPadding - _yAxisSpacing*idx - height/2;
         
         CGRect rc = CGRectMake(0, y, width, height);
         

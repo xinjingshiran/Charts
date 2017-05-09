@@ -20,8 +20,6 @@
 		D053BD171EBB411F00866D92 /* ZRPieShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D053BD161EBB411F00866D92 /* ZRPieShapeLayer.m */; };
 		D0A7CE401EC18916006F1AE9 /* ZRLineChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0A7CE3F1EC18916006F1AE9 /* ZRLineChartView.m */; };
 		D0C3A5FB1EC195F900408F6B /* ZRLineShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FA1EC195F900408F6B /* ZRLineShapeLayer.m */; };
-		D0C3A6001EC19C9B00408F6B /* CircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FD1EC19C9B00408F6B /* CircleProgressView.m */; };
-		D0C3A6011EC19C9B00408F6B /* CircleProgressLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FF1EC19C9B00408F6B /* CircleProgressLayer.m */; };
 		D0C3A6041EC1B2CA00408F6B /* ZRLineChartPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A6031EC1B2CA00408F6B /* ZRLineChartPoint.m */; };
 		D0C3A6071EC1BB1100408F6B /* ZRLineChartLine.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A6061EC1BB1100408F6B /* ZRLineChartLine.m */; };
 /* End PBXBuildFile section */
@@ -69,10 +67,6 @@
 		D0A7CE3F1EC18916006F1AE9 /* ZRLineChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRLineChartView.m; sourceTree = "<group>"; };
 		D0C3A5F91EC195F900408F6B /* ZRLineShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZRLineShapeLayer.h; sourceTree = "<group>"; };
 		D0C3A5FA1EC195F900408F6B /* ZRLineShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRLineShapeLayer.m; sourceTree = "<group>"; };
-		D0C3A5FC1EC19C9B00408F6B /* CircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleProgressView.h; sourceTree = "<group>"; };
-		D0C3A5FD1EC19C9B00408F6B /* CircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleProgressView.m; sourceTree = "<group>"; };
-		D0C3A5FE1EC19C9B00408F6B /* CircleProgressLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleProgressLayer.h; sourceTree = "<group>"; };
-		D0C3A5FF1EC19C9B00408F6B /* CircleProgressLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleProgressLayer.m; sourceTree = "<group>"; };
 		D0C3A6021EC1B2CA00408F6B /* ZRLineChartPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZRLineChartPoint.h; sourceTree = "<group>"; };
 		D0C3A6031EC1B2CA00408F6B /* ZRLineChartPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRLineChartPoint.m; sourceTree = "<group>"; };
 		D0C3A6051EC1BB1100408F6B /* ZRLineChartLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZRLineChartLine.h; sourceTree = "<group>"; };
@@ -132,10 +126,6 @@
 				D053BCE01EBAE22A00866D92 /* AppDelegate.m */,
 				D053BCE21EBAE22A00866D92 /* ViewController.h */,
 				D053BCE31EBAE22A00866D92 /* ViewController.m */,
-				D0C3A5FC1EC19C9B00408F6B /* CircleProgressView.h */,
-				D0C3A5FD1EC19C9B00408F6B /* CircleProgressView.m */,
-				D0C3A5FE1EC19C9B00408F6B /* CircleProgressLayer.h */,
-				D0C3A5FF1EC19C9B00408F6B /* CircleProgressLayer.m */,
 				D053BCE51EBAE22A00866D92 /* Main.storyboard */,
 				D053BCE81EBAE22A00866D92 /* Assets.xcassets */,
 				D053BCEA1EBAE22A00866D92 /* LaunchScreen.storyboard */,
@@ -344,9 +334,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0C3A6011EC19C9B00408F6B /* CircleProgressLayer.m in Sources */,
 				D053BCE41EBAE22A00866D92 /* ViewController.m in Sources */,
-				D0C3A6001EC19C9B00408F6B /* CircleProgressView.m in Sources */,
 				D0A7CE401EC18916006F1AE9 /* ZRLineChartView.m in Sources */,
 				D0C3A5FB1EC195F900408F6B /* ZRLineShapeLayer.m in Sources */,
 				D053BCE11EBAE22A00866D92 /* AppDelegate.m in Sources */,

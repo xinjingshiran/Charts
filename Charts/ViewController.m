@@ -9,13 +9,8 @@
 #import "ViewController.h"
 #import "ZRPieChartView.h"
 #import "ZRLineChartView.h"
-#import "CircleProgressView.h"
 
 @interface ViewController ()
-
-@property (nonatomic, strong) ZRLineChartView *lineChartView;
-
-@property (nonatomic, strong) CircleProgressView * circleProgressView;
 
 @end
 
@@ -46,32 +41,33 @@
      */
     
     ZRLineChartLine *line1 = [[ZRLineChartLine alloc] init];
-    line1.points = @[[ZRLineChartPoint pointWithX:1 andY:0.3],
-                     [ZRLineChartPoint pointWithX:2 andY:1],
-                     [ZRLineChartPoint pointWithX:3 andY:1.5],
-                     [ZRLineChartPoint pointWithX:4 andY:2],
-                     [ZRLineChartPoint pointWithX:5 andY:0.5],
-                     [ZRLineChartPoint pointWithX:6 andY:1],
-                     [ZRLineChartPoint pointWithX:7 andY:1.3]];
+    line1.points = @[[ZRLineChartPoint pointWithX:1 andY:0.1],
+                     [ZRLineChartPoint pointWithX:2 andY:0.5],
+                     [ZRLineChartPoint pointWithX:3 andY:0.5],
+                     [ZRLineChartPoint pointWithX:4 andY:1],
+                     [ZRLineChartPoint pointWithX:5 andY:0.7],
+                     [ZRLineChartPoint pointWithX:6 andY:0.6],
+                     [ZRLineChartPoint pointWithX:7 andY:1]];
     
     ZRLineChartLine *line2 = [[ZRLineChartLine alloc] init];
     line2.lineColor = [UIColor greenColor];
-    line2.points = @[[ZRLineChartPoint pointWithX:1 andY:0.5],
-                     [ZRLineChartPoint pointWithX:2 andY:1.2],
-                     [ZRLineChartPoint pointWithX:3 andY:1.3],
-                     [ZRLineChartPoint pointWithX:4 andY:1.7],
-                     [ZRLineChartPoint pointWithX:5 andY:0.5],
-                     [ZRLineChartPoint pointWithX:6 andY:1.2],
-                     [ZRLineChartPoint pointWithX:7 andY:1.9]];
+    line2.points = @[[ZRLineChartPoint pointWithX:1 andY:0.3],
+                     [ZRLineChartPoint pointWithX:2 andY:0.2],
+                     [ZRLineChartPoint pointWithX:3 andY:0.4],
+                     [ZRLineChartPoint pointWithX:4 andY:0.8],
+                     [ZRLineChartPoint pointWithX:5 andY:0.3],
+                     [ZRLineChartPoint pointWithX:6 andY:0.5],
+                     [ZRLineChartPoint pointWithX:7 andY:1]];
     
-    _lineChartView = [[ZRLineChartView alloc] initWithFrame:rc];
-    _lineChartView.backgroundColor = [UIColor whiteColor];
-    _lineChartView.xAxisArray = @[@"5.1",@"5.2",@"5.3",@"5.4",@"5.5",@"5.6",@"5.7"];
-    _lineChartView.yAxisArray = @[@"0", @"25", @"50"];
-    _lineChartView.dataArray = @[line1, line2];
-    [self.view addSubview:_lineChartView];
+    ZRLineChartView *lineChartView = [[ZRLineChartView alloc] initWithFrame:rc];
+    lineChartView.backgroundColor = [UIColor whiteColor];
+    lineChartView.xAxisArray = @[@"5.1",@"5.2",@"5.3",@"5.4",@"5.5",@"5.6",@"5.7"];
+    lineChartView.yAxisArray = @[@"0", @"25", @"50"];
+    lineChartView.dataArray = @[line1, line2];
+    lineChartView.clipsToBounds = NO;
+    [self.view addSubview:lineChartView];
     
-    [_lineChartView drawLine];
+    [lineChartView drawLine];
 }
 
 
