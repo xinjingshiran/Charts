@@ -41,9 +41,10 @@
     
     if (self) {
         
+        [self setupDefault];
+        
         _pieContainerView = [[UIView alloc] initWithFrame:self.bounds];
         _pieContainerView.layer.cornerRadius = frame.size.width/2;
-        _pieContainerView.layer.masksToBounds = YES;
         [self addSubview:_pieContainerView];
         
         _pieLayers = [[NSMutableArray alloc] init];
@@ -56,33 +57,47 @@
     return self;
 }
 
+- (void)setupDefault
+{
+    _pieCenter = CGPointMake(CGRectGetWidth(self.frame)/2, CGRectGetHeight(self.frame)/2);
+    _radius = (MIN(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)))/2;
+    _innerRadius = 70;
+}
+
 - (void)drawPie
 {
-    [self setupDefault];
+    [self reset];
     
     [self drawLayers];
 }
 
-- (void)setupDefault
-{
-    _pieCenter = CGPointMake(CGRectGetWidth(self.frame)/2, CGRectGetHeight(self.frame)/2);
-    _radius = (MIN(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)) - 40)/2;
-    _innerRadius = 70;
-}
-
-- (void)drawLayers
+- (void)reset
 {
     [_pieLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [_pieLayers removeAllObjects];
     
-    [_iconLayers makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [_iconLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [_iconLayers removeAllObjects];
+    
+    _pieContainerView.transform = CGAffineTransformIdentity;
+}
+
+- (void)drawLayers
+{
+    [self addHoleLayer];
+    
+    if (_sectors.count == 0) {
+        
+        _pieContainerView.backgroundColor = [UIColor lightGrayColor];
+     
+        return;
+    }
     
     CGFloat totalValue = 0.0;
     
-    for (NSNumber *value in _percents) {
+    for (ZRPieChartSector *sector in _sectors) {
         
-        totalValue += value.floatValue;
+        totalValue += sector.percent;
     }
     
     CGFloat startFromAngle = 0;
@@ -91,17 +106,19 @@
     CGFloat endFromAngle = 0;
     CGFloat endToAngle = 0;
     
-    for (NSInteger i = 0; i < _percents.count; i++) {
+    for (NSInteger i = 0; i < _sectors.count; i++) {
         
-        CGFloat value = [_percents[i] floatValue];
+        ZRPieChartSector *obj = _sectors[i];
+        
+        CGFloat value = obj.percent;
         
         endToAngle += (value/totalValue) * M_PI * 2;
         
         ZRPieShapeLayer *layer = [self layerWithCenter:_pieCenter
                                                 radius:_radius
                                            innerRadius:_innerRadius];
-        layer.fillColor = [_colors[i] CGColor];
-        [_pieContainerView.layer addSublayer:layer];
+        layer.fillColor = [obj.backgroundColor CGColor];
+        [_pieContainerView.layer insertSublayer:layer below:_holeLayer];
         
         [_pieLayers addObject:layer];
         
@@ -166,12 +183,14 @@
 
 - (void)addIconLayerViewAtLayer:(ZRPieShapeLayer *)pieLayer
 {
+    ZRPieChartSector *obj = _sectors[[_pieLayers indexOfObject:pieLayer]];
+    
     CAShapeLayer *layer = [CAShapeLayer layer];
     layer.bounds = CGRectMake(0, 0, 20, 20);
     layer.anchorPoint = CGPointMake(0.5, 0.5);
     layer.position = CGPointMake(pieLayer.center.x+(pieLayer.radius+pieLayer.innerRadius)/2, pieLayer.center.y);
     layer.backgroundColor = [UIColor clearColor].CGColor;
-    layer.contents = (id)[_icons[[_pieLayers indexOfObject:pieLayer]] CGImage];
+    layer.contents = (id)[obj.icon CGImage];
     
     [pieLayer addSublayer:layer];
     
@@ -229,6 +248,8 @@
         [_animationTimer invalidate];
         _animationTimer = nil;
         
+        _pieContainerView.backgroundColor = self.backgroundColor;
+        
         self.selectedLayer = _pieLayers[0];
     }
 }
@@ -257,7 +278,10 @@
                          }
                          completion:^(BOOL finished) {
                             
-                             _selectedLayer.selected = YES;
+                             if (_sectors.count > 1) {
+                                 
+                                 _selectedLayer.selected = YES;
+                             }
                              
                              if ([_delegate respondsToSelector:@selector(pieView:didSelectSectorAtIndex:)]) {
                                  

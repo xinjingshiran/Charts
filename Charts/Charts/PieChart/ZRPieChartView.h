@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZRPieChartSector.h"
 
 @class ZRPieChartView;
 
@@ -18,11 +19,7 @@
 
 @interface ZRPieChartView : UIView
 
-@property (nonatomic, strong) NSArray *percents;
-
-@property (nonatomic, strong) NSArray *colors;
-
-@property (nonatomic, strong) NSArray *icons;
+@property (nonatomic, strong) NSArray *sectors;
 
 @property (nonatomic, weak) NSObject<ZRPieChartViewDelegate> *delegate;
 

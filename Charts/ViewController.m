@@ -20,26 +20,42 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    
     CGRect rc = CGRectZero;
     rc.origin.x = 10;
     rc.origin.y = 50;
     rc.size.width = self.view.frame.size.width - rc.origin.x*2;
     rc.size.height = rc.size.width;
     
-    /*
     UIImage *icon = [UIImage imageNamed:@"work_order_finish_icon.png"];
+    
+    NSArray *percents = @[@2, @2, @3, @1, @4];
+    NSArray *colors = @[[UIColor redColor],[UIColor orangeColor],[UIColor greenColor],[UIColor brownColor],[UIColor cyanColor]];
+    NSArray *icons = @[icon, icon, icon, icon, icon];
+    
+    NSMutableArray *sectors = [[NSMutableArray alloc] init];
+    
+    for (NSInteger idx = 0; idx < percents.count; idx++) {
+        
+        CGFloat percent = [percents[idx] floatValue];
+        UIColor *color = colors[idx];
+        UIImage *icon = icons[idx];
+        
+        ZRPieChartSector *sector = [[ZRPieChartSector alloc] init];
+        sector.percent = percent;
+        sector.backgroundColor = color;
+        sector.icon = icon;
+        
+        [sectors addObject:sector];
+    }
     
     ZRPieChartView *pieView = [[ZRPieChartView alloc] initWithFrame:rc];
     pieView.backgroundColor = [UIColor whiteColor];
-    pieView.percents = @[@2, @2, @3, @1, @4];
-    pieView.colors = @[[UIColor redColor],[UIColor orangeColor],[UIColor greenColor],[UIColor brownColor],[UIColor cyanColor]];
-    pieView.icons = @[icon, icon, icon, icon, icon];
+    pieView.sectors = sectors;
     [self.view addSubview:pieView];
     
     [pieView drawPie];
-     */
     
+    /*
     ZRLineChartLine *line1 = [[ZRLineChartLine alloc] init];
     line1.points = @[[ZRLineChartPoint pointWithX:1 andY:0.1],
                      [ZRLineChartPoint pointWithX:2 andY:0.5],
@@ -68,6 +84,7 @@
     [self.view addSubview:lineChartView];
     
     [lineChartView drawLine];
+     */
 }
 
 
