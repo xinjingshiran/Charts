@@ -22,6 +22,8 @@
 		D0C3A5FB1EC195F900408F6B /* ZRLineShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FA1EC195F900408F6B /* ZRLineShapeLayer.m */; };
 		D0C3A6001EC19C9B00408F6B /* CircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FD1EC19C9B00408F6B /* CircleProgressView.m */; };
 		D0C3A6011EC19C9B00408F6B /* CircleProgressLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A5FF1EC19C9B00408F6B /* CircleProgressLayer.m */; };
+		D0C3A6041EC1B2CA00408F6B /* ZRLineChartPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A6031EC1B2CA00408F6B /* ZRLineChartPoint.m */; };
+		D0C3A6071EC1BB1100408F6B /* ZRLineChartLine.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C3A6061EC1BB1100408F6B /* ZRLineChartLine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,10 @@
 		D0C3A5FD1EC19C9B00408F6B /* CircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleProgressView.m; sourceTree = "<group>"; };
 		D0C3A5FE1EC19C9B00408F6B /* CircleProgressLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleProgressLayer.h; sourceTree = "<group>"; };
 		D0C3A5FF1EC19C9B00408F6B /* CircleProgressLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleProgressLayer.m; sourceTree = "<group>"; };
+		D0C3A6021EC1B2CA00408F6B /* ZRLineChartPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZRLineChartPoint.h; sourceTree = "<group>"; };
+		D0C3A6031EC1B2CA00408F6B /* ZRLineChartPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRLineChartPoint.m; sourceTree = "<group>"; };
+		D0C3A6051EC1BB1100408F6B /* ZRLineChartLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZRLineChartLine.h; sourceTree = "<group>"; };
+		D0C3A6061EC1BB1100408F6B /* ZRLineChartLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZRLineChartLine.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +199,10 @@
 				D0A7CE3F1EC18916006F1AE9 /* ZRLineChartView.m */,
 				D0C3A5F91EC195F900408F6B /* ZRLineShapeLayer.h */,
 				D0C3A5FA1EC195F900408F6B /* ZRLineShapeLayer.m */,
+				D0C3A6051EC1BB1100408F6B /* ZRLineChartLine.h */,
+				D0C3A6061EC1BB1100408F6B /* ZRLineChartLine.m */,
+				D0C3A6021EC1B2CA00408F6B /* ZRLineChartPoint.h */,
+				D0C3A6031EC1B2CA00408F6B /* ZRLineChartPoint.m */,
 			);
 			path = LineChart;
 			sourceTree = "<group>";
@@ -341,6 +351,8 @@
 				D0C3A5FB1EC195F900408F6B /* ZRLineShapeLayer.m in Sources */,
 				D053BCE11EBAE22A00866D92 /* AppDelegate.m in Sources */,
 				D053BD141EBAEA0B00866D92 /* ZRPieChartView.m in Sources */,
+				D0C3A6041EC1B2CA00408F6B /* ZRLineChartPoint.m in Sources */,
+				D0C3A6071EC1BB1100408F6B /* ZRLineChartLine.m in Sources */,
 				D053BD171EBB411F00866D92 /* ZRPieShapeLayer.m in Sources */,
 				D053BCDE1EBAE22A00866D92 /* main.m in Sources */,
 			);

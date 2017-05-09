@@ -45,16 +45,30 @@
     [pieView drawPie];
      */
     
+    ZRLineChartLine *line1 = [[ZRLineChartLine alloc] init];
+    line1.points = @[[ZRLineChartPoint pointWithX:1 andY:0.3],
+                     [ZRLineChartPoint pointWithX:2 andY:1],
+                     [ZRLineChartPoint pointWithX:3 andY:1.5],
+                     [ZRLineChartPoint pointWithX:4 andY:2],
+                     [ZRLineChartPoint pointWithX:5 andY:0.5],
+                     [ZRLineChartPoint pointWithX:6 andY:1],
+                     [ZRLineChartPoint pointWithX:7 andY:1.3]];
+    
+    ZRLineChartLine *line2 = [[ZRLineChartLine alloc] init];
+    line2.lineColor = [UIColor greenColor];
+    line2.points = @[[ZRLineChartPoint pointWithX:1 andY:0.5],
+                     [ZRLineChartPoint pointWithX:2 andY:1.2],
+                     [ZRLineChartPoint pointWithX:3 andY:1.3],
+                     [ZRLineChartPoint pointWithX:4 andY:1.7],
+                     [ZRLineChartPoint pointWithX:5 andY:0.5],
+                     [ZRLineChartPoint pointWithX:6 andY:1.2],
+                     [ZRLineChartPoint pointWithX:7 andY:1.9]];
+    
     _lineChartView = [[ZRLineChartView alloc] initWithFrame:rc];
-    _lineChartView.points = @[[NSValue valueWithCGPoint:CGPointMake(0, rc.size.height)],
-                              [NSValue valueWithCGPoint:CGPointMake(20, rc.size.height-10)],
-                              [NSValue valueWithCGPoint:CGPointMake(40, rc.size.height-20)],
-                              [NSValue valueWithCGPoint:CGPointMake(60, rc.size.height-30)],
-                              [NSValue valueWithCGPoint:CGPointMake(80, rc.size.height-40)],
-                              [NSValue valueWithCGPoint:CGPointMake(100, rc.size.height-50)],
-                              [NSValue valueWithCGPoint:CGPointMake(120, rc.size.height-60)],
-                              [NSValue valueWithCGPoint:CGPointMake(140, rc.size.height-70)],];
-    _lineChartView.backgroundColor = [UIColor redColor];
+    _lineChartView.backgroundColor = [UIColor whiteColor];
+    _lineChartView.xAxisArray = @[@"5.1",@"5.2",@"5.3",@"5.4",@"5.5",@"5.6",@"5.7"];
+    _lineChartView.yAxisArray = @[@"0", @"25", @"50"];
+    _lineChartView.dataArray = @[line1, line2];
     [self.view addSubview:_lineChartView];
     
     [_lineChartView drawLine];
