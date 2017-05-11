@@ -44,6 +44,8 @@
     
     [self setNeedsDisplay];
     
+    [self.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    
     [_dataArray enumerateObjectsUsingBlock:^(ZRLineChartLine *line, NSUInteger idx, BOOL * _Nonnull stop) {
         
         UIBezierPath *path = [UIBezierPath bezierPath];
