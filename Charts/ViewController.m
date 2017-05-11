@@ -55,6 +55,17 @@
     
     [pieView drawPie];
     
+    rc.origin.y = CGRectGetMaxY(pieView.frame) + 20;
+    rc.size.width = 100;
+    rc.size.height = 40;
+    rc.origin.x = (self.view.frame.size.width - rc.size.width)/2;
+    
+    UIButton *button = [[UIButton alloc] initWithFrame:rc];
+    [button setTitle:@"加载" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [button addTarget:pieView action:@selector(drawPie) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
+    
     /*
     ZRLineChartLine *line1 = [[ZRLineChartLine alloc] init];
     line1.points = @[[ZRLineChartPoint pointWithX:1 andY:0.1],

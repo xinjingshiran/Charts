@@ -17,8 +17,6 @@
 
 @property (nonatomic, assign) CGFloat radius;
 
-@property (nonatomic, assign) CGFloat innerRadius;
-
 @property (nonatomic, strong) NSMutableArray *pieLayers;
 
 @property (nonatomic, strong) NSMutableArray *iconLayers;
@@ -68,18 +66,26 @@
 {
     [self reset];
     
-    [self drawLayers];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        //延迟0.3秒，等待_pieContainerView旋转动画结束，否则会出现饼状图从非0度开始。
+        
+        [self drawLayers];
+    });
 }
 
 - (void)reset
 {
+    _pieContainerView.transform = CGAffineTransformIdentity;
+    
+    [_animationTimer invalidate];
+    _animationTimer = nil;
+    
+    [_pieLayers makeObjectsPerformSelector:@selector(removeAllAnimations)];
     [_pieLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [_pieLayers removeAllObjects];
     
     [_iconLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [_iconLayers removeAllObjects];
-    
-    _pieContainerView.transform = CGAffineTransformIdentity;
 }
 
 - (void)drawLayers
@@ -250,7 +256,7 @@
         
         _pieContainerView.backgroundColor = self.backgroundColor;
         
-        self.selectedLayer = _pieLayers[0];
+        self.selectedLayer = [_pieLayers firstObject];
     }
 }
 
