@@ -66,15 +66,12 @@
 {
     [self reset];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        //延迟0.3秒，等待_pieContainerView旋转动画结束，否则会出现饼状图从非0度开始。
-        
-        [self drawLayers];
-    });
+    [self drawLayers];
 }
 
 - (void)reset
 {
+    [_pieContainerView.layer removeAllAnimations];
     _pieContainerView.transform = CGAffineTransformIdentity;
     
     [_animationTimer invalidate];
