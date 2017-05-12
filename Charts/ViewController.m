@@ -20,6 +20,17 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    [self drawPieChart];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)drawPieChart
+{
     CGRect rc = CGRectZero;
     rc.origin.x = 10;
     rc.origin.y = 50;
@@ -54,19 +65,16 @@
     [self.view addSubview:pieView];
     
     [pieView drawPie];
+}
+
+- (void)drawLineChart
+{
+    CGRect rc = CGRectZero;
+    rc.origin.x = 10;
+    rc.origin.y = 50;
+    rc.size.width = self.view.frame.size.width - rc.origin.x*2;
+    rc.size.height = rc.size.width;
     
-    rc.origin.y = CGRectGetMaxY(pieView.frame) + 20;
-    rc.size.width = 100;
-    rc.size.height = 40;
-    rc.origin.x = (self.view.frame.size.width - rc.size.width)/2;
-    
-    UIButton *button = [[UIButton alloc] initWithFrame:rc];
-    [button setTitle:@"加载" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [button addTarget:pieView action:@selector(drawPie) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
-    
-    /*
     ZRLineChartLine *line1 = [[ZRLineChartLine alloc] init];
     line1.points = @[[ZRLineChartPoint pointWithX:1 andY:0.1],
                      [ZRLineChartPoint pointWithX:2 andY:0.5],
@@ -95,14 +103,6 @@
     [self.view addSubview:lineChartView];
     
     [lineChartView drawLine];
-     */
 }
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 @end
