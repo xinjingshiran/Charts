@@ -17,6 +17,8 @@
 
 @property (nonatomic, assign) CGFloat radius;
 
+@property (nonatomic, assign) CGFloat animationDuration;
+
 @property (nonatomic, strong) NSMutableArray *pieLayers;
 
 @property (nonatomic, strong) NSMutableArray *iconLayers;
@@ -60,6 +62,8 @@
     _pieCenter = CGPointMake(CGRectGetWidth(self.frame)/2, CGRectGetHeight(self.frame)/2);
     _radius = (MIN(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)))/2;
     _innerRadius = 70;
+    
+    _animationDuration = 1.5;
 }
 
 - (void)drawPie
@@ -119,7 +123,9 @@
         
         ZRPieShapeLayer *layer = [self layerWithCenter:_pieCenter
                                                 radius:_radius
-                                           innerRadius:_innerRadius];
+                                           innerRadius:_innerRadius
+                                            startAngle:startToAngle
+                                              endAngle:endToAngle];
         layer.fillColor = [obj.backgroundColor CGColor];
         [_pieContainerView.layer insertSublayer:layer below:_holeLayer];
         
@@ -128,7 +134,7 @@
         [self addIconLayerViewAtLayer:layer];
         
         [CATransaction begin];
-        [CATransaction setAnimationDuration:1.5];
+        [CATransaction setAnimationDuration:_animationDuration];
         
         [layer createAnimationWithKey:@"startAngle"
                             fromValue:@(startFromAngle)
@@ -148,12 +154,14 @@
     [self addHoleLayer];
 }
 
-- (ZRPieShapeLayer *)layerWithCenter:(CGPoint)center radius:(CGFloat)radius innerRadius:(CGFloat)innerRadius
+- (ZRPieShapeLayer *)layerWithCenter:(CGPoint)center radius:(CGFloat)radius innerRadius:(CGFloat)innerRadius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle
 {
     ZRPieShapeLayer *layer = [ZRPieShapeLayer layer];
     layer.center = center;
     layer.radius = radius;
     layer.innerRadius = innerRadius;
+    layer.startAngle = startAngle;
+    layer.endAngle = endAngle;
     
     return layer;
 }
@@ -228,18 +236,23 @@
         NSNumber *presentationLayerEndAngle = [[layer presentationLayer] valueForKey:@"endAngle"];
         CGFloat endAngle = [presentationLayerEndAngle doubleValue];
         
-        UIBezierPath *path = [self pathWithCenter:layer.center radius:layer.radius innerRadius:layer.innerRadius startAngle:startAngle endAngle:endAngle];
-        
-        obj.path = path.CGPath;
-        
-        CALayer *iconLayer = _iconLayers[idx];
-        
-        CGFloat midAngle = (startAngle + endAngle)/2;
-        [CATransaction setDisableActions:YES];
-        iconLayer.position = CGPointMake(layer.center.x + ((layer.radius+layer.innerRadius)/2 * cos(midAngle)),
-                                         layer.center.y + ((layer.radius+layer.innerRadius)/2 * sin(midAngle)));
-        [CATransaction setDisableActions:NO];
+        [self animateLayer:layer startAngle:startAngle endAngle:endAngle];
     }];
+}
+
+- (void)animateLayer:(ZRPieShapeLayer *)layer startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle
+{
+    UIBezierPath *path = [self pathWithCenter:layer.center radius:layer.radius innerRadius:layer.innerRadius startAngle:startAngle endAngle:endAngle];
+    
+    layer.path = path.CGPath;
+    
+    CALayer *iconLayer = layer.sublayers[0];
+    
+    CGFloat midAngle = (startAngle + endAngle)/2;
+    [CATransaction setDisableActions:YES];
+    iconLayer.position = CGPointMake(layer.center.x + ((layer.radius+layer.innerRadius)/2 * cos(midAngle)),
+                                     layer.center.y + ((layer.radius+layer.innerRadius)/2 * sin(midAngle)));
+    [CATransaction setDisableActions:NO];
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
@@ -250,6 +263,13 @@
         
         [_animationTimer invalidate];
         _animationTimer = nil;
+        
+        [_pieLayers enumerateObjectsUsingBlock:^(CAShapeLayer *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            ZRPieShapeLayer *layer = (ZRPieShapeLayer *)obj;
+            
+            [self animateLayer:layer startAngle:layer.startAngle endAngle:layer.endAngle];
+        }];
         
         _pieContainerView.backgroundColor = self.backgroundColor;
         
