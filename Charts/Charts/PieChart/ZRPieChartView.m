@@ -77,6 +77,7 @@
 {
     [_pieContainerView.layer removeAllAnimations];
     _pieContainerView.transform = CGAffineTransformIdentity;
+    _pieContainerView.backgroundColor = [UIColor lightGrayColor];
     
     [_animationTimer invalidate];
     _animationTimer = nil;
@@ -92,13 +93,6 @@
 - (void)drawLayers
 {
     [self addHoleLayer];
-    
-    if (_sectors.count == 0) {
-        
-        _pieContainerView.backgroundColor = [UIColor lightGrayColor];
-     
-        return;
-    }
     
     CGFloat totalValue = 0.0;
     
@@ -267,11 +261,11 @@
         [_pieLayers enumerateObjectsUsingBlock:^(CAShapeLayer *obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             ZRPieShapeLayer *layer = (ZRPieShapeLayer *)obj;
-            
+
             [self animateLayer:layer startAngle:layer.startAngle endAngle:layer.endAngle];
         }];
         
-        _pieContainerView.backgroundColor = self.backgroundColor;
+        _pieContainerView.backgroundColor = _pieLayers.lastObject ? [UIColor clearColor] : [UIColor lightGrayColor];
         
         self.selectedLayer = [_pieLayers firstObject];
     }

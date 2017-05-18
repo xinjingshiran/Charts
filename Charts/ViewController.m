@@ -20,7 +20,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    [self drawPieChart];
+//    [self drawPieChart];
+    
+    [self drawLineChart];
 }
 
 

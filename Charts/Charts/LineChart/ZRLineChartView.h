@@ -24,6 +24,8 @@
 
 @property (nonatomic, assign) CGFloat animationDuration;
 
+@property (nonatomic, assign) BOOL animation;
+
 - (void)drawLine;
 
 @end
