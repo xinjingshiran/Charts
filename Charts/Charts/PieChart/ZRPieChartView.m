@@ -62,6 +62,7 @@
     _pieCenter = CGPointMake(CGRectGetWidth(self.frame)/2, CGRectGetHeight(self.frame)/2);
     _radius = (MIN(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)))/2;
     _innerRadius = 70;
+    _innerColor = [UIColor whiteColor];
     
     _animationDuration = 1.5;
 }
@@ -144,8 +145,6 @@
         
         startToAngle = endToAngle;
     }
-    
-    [self addHoleLayer];
 }
 
 - (ZRPieShapeLayer *)layerWithCenter:(CGPoint)center radius:(CGFloat)radius innerRadius:(CGFloat)innerRadius startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle
@@ -180,7 +179,7 @@
     
     CAShapeLayer *layer = [CAShapeLayer layer];
     layer.path = path.CGPath;
-    layer.fillColor = [UIColor whiteColor].CGColor;
+    layer.fillColor = _innerColor.CGColor;
     [_pieContainerView.layer addSublayer:layer];
     
     self.holeLayer = layer;

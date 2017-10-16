@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "ZRPieChartView.h"
 #import "ZRLineChartView.h"
+#import "ZRCircularChartView.h"
 
 @interface ViewController ()
 
@@ -22,7 +23,9 @@
     
 //    [self drawPieChart];
     
-    [self drawLineChart];
+//    [self drawLineChart];
+    
+    [self drawCircularChart];
 }
 
 
@@ -105,6 +108,39 @@
     [self.view addSubview:lineChartView];
     
     [lineChartView drawLine];
+}
+
+- (void)drawCircularChart
+{
+    CGRect rc = CGRectZero;
+    rc.origin.x = 10;
+    rc.origin.y = 50;
+    rc.size.width = self.view.frame.size.width - rc.origin.x*2;
+    rc.size.height = rc.size.width;
+    
+    NSArray *percents = @[@2, @2, @3, @1, @4];
+    NSArray *colors = @[[UIColor redColor],[UIColor orangeColor],[UIColor greenColor],[UIColor brownColor],[UIColor cyanColor]];
+    
+    NSMutableArray *sectors = [[NSMutableArray alloc] init];
+    
+    for (NSInteger idx = 0; idx < percents.count; idx++) {
+        
+        CGFloat percent = [percents[idx] floatValue];
+        UIColor *color = colors[idx];
+        
+        ZRCircularChartSector *sector = [[ZRCircularChartSector alloc] init];
+        sector.percent = percent;
+        sector.backgroundColor = color;
+        
+        [sectors addObject:sector];
+    }
+    
+    ZRCircularChartView *circularView = [[ZRCircularChartView alloc] initWithFrame:rc];
+    circularView.backgroundColor = [UIColor whiteColor];
+    circularView.sectors = sectors;
+    [self.view addSubview:circularView];
+    
+    [circularView drawCircular];
 }
 
 @end

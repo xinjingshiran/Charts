@@ -22,6 +22,8 @@
 @property (nonatomic, strong) NSArray *sectors;
 
 @property (nonatomic, assign) CGFloat innerRadius;
+@property (nonatomic, strong) UIColor *innerColor;
+
 @property (nonatomic, weak) NSObject<ZRPieChartViewDelegate> *delegate;
 
 - (void)drawPie;
